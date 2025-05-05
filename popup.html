@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { 
+      font-family: 'Segoe UI', Tahoma, Arial, sans-serif; 
+      padding: 15px; 
+      width: 320px;
+      background-color: #f8f9fa;
+      color: #333;
+    }
+    
+    h2 {
+      margin-top: 0;
+      color: #2c3e50;
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    h2::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: #3498db;
+      margin: 8px auto 0;
+      border-radius: 2px;
+    }
+    
+    button { 
+      width: 100%; 
+      margin-top: 10px; 
+      padding: 12px; 
+      font-size: 15px; 
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    button:hover {
+      background-color: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+    
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    }
+    
+    button:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    button#togglePage.active {
+      background-color: #27ae60;
+    }
+    
+    button#togglePage.inactive {
+      background-color: #e74c3c;
+    }
+    
+    button#enableAll {
+      background-color: #9b59b6;
+    }
+    
+    button#enableAll:hover {
+      background-color: #8e44ad;
+    }
+    
+    .settings {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .setting-label {
+      font-size: 14px;
+      color: #34495e;
+    }
+    
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    
+    input[type="checkbox"] {
+      transform: scale(1.2);
+      accent-color: #3498db;
+    }
+    
+    .status {
+      text-align: center;
+      margin-top: 15px;
+      padding: 8px;
+      font-size: 13px;
+      color: #fff;
+      background-color: #7f8c8d;
+      border-radius: 4px;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .status.active {
+      background-color: #27ae60;
+    }
+    
+    .status.inactive {
+      background-color: #e74c3c;
+    }
+    
+    .status::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #fff;
+      margin-left: 8px;
+    }
+    
+    .status.active::before {
+      animation: pulse 1.5s infinite;
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+    
+    .note {
+      font-size: 11px;
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 10px;
+      padding: 8px;
+      background-color: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    .footer {
+      margin-top: 15px;
+      font-size: 10px;
+      color: #95a5a6;
+      text-align: center;
+    }
+    
+    .tabs {
+      display: flex;
+      margin-top: 15px;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .tab {
+      padding: 8px 12px;
+      cursor: pointer;
+      background-color: #f1f1f1;
+      border-radius: 4px 4px 0 0;
+      margin-left: 5px;
+      font-size: 13px;
+    }
+    
+    .tab.active {
+      background-color: #3498db;
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .counter {
+      font-size: 12px;
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Stay Awake Pro</h2>
+  
+  <button id="togglePage">🔄 تفعيل/إيقاف لهذه الصفحة</button>
+  <button id="enableAll">✅ تفعيل الكل</button>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="settings">الإعدادات</div>
+    <div class="tab" data-tab="info">معلومات</div>
+  </div>
+  
+  <div class="tab-content active" id="settings-tab">
+    <div class="settings">
+      <div class="setting-row">
+        <span class="setting-label">الفاصل الزمني (ثوانٍ):</span>
+        <input type="number" id="interval" min="1" max="60" value="1">
+      </div>
+      
+      <div class="setting-row">
+        <span class="setting-label">تفعيل تلقائي للصفحات الجديدة:</span>
+        <input type="checkbox" id="autoEnable">
+      </div>
+      
+      <div class="setting-row">
+        <span class="setting-label">حفظ الحالة عند الإغلاق:</span>
+        <input type="checkbox" id="saveState" checked>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tab-content" id="info-tab">
+    <div class="settings">
+      <div class="setting-row">
+        <span class="setting-label">الصفحات النشطة:</span>
+        <span id="activeTabsCount">0</span>
+      </div>
+      
+      <div class="setting-row">
+        <span class="setting-label">وقت التشغيل:</span>
+        <span id="uptime">0:00:00</span>
+      </div>
+      
+      <div class="setting-row">
+        <span class="setting-label">الإصدار:</span>
+        <span>1.5</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="status" id="status">جاري التحميل...</div>
+  
+  <div class="counter" id="counter"></div>
+  
+  <div class="note">
+    ملاحظة: للحصول على أفضل النتائج مع مواقع PTC، استخدم فاصل زمني = 1 ثانية
+  </div>
+  
+  <div class="footer">
+    Stay Awake Pro &copy; 2023 - جميع الحقوق محفوظة
+  </div>
+  
+  <script src="popup.js"></script>
+  <script>
+    // تبديل التبويبات
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // إزالة الفئة النشطة من جميع التبويبات
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        // إضافة الفئة النشطة للتبويب المحدد
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      });
+    });
+    
+    // عداد وقت التشغيل
+    let startTime = Date.now();
+    setInterval(() => {
+      const uptime = Math.floor((Date.now() - startTime) / 1000);
+      const hours = Math.floor(uptime / 3600);
+      const minutes = Math.floor((uptime % 3600) / 60);
+      const seconds = uptime % 60;
+      document.getElementById('uptime').textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }, 1000);
+  </script>
+</body>
+</html>
